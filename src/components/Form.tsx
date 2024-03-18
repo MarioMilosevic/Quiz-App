@@ -1,21 +1,25 @@
 import { useState } from "react";
-import { videoGames, sports, mythology, generalKnowledge } from "../constants";
+import { categories } from "../constants";
 
 const Form = () => {
   const [options, setOptions] = useState({
     amount: "10",
     categoryName: "General Knowledge",
-    categoryCode: "15",
+    categoryCode: "9",
     difficulty: "Easy",
   });
-
-
-  const nemamPojma = () => {
-      
-    setOptions()
-  }
-
   console.log(options);
+
+  const selectHandler = (e) => {
+    const selectedCategory = categories.find(
+      (category) => category.categoryCode === e.target.value
+    );
+    setOptions({
+      ...options,
+      categoryName: selectedCategory?.categoryName,
+      categoryCode: selectedCategory?.categoryCode,
+    });
+  };
 
   return (
     <div className="bg-zinc-50 p-8 flex gap-4 mx-auto flex-col w-[550px] rounded-3xl shadow-lg">
@@ -41,14 +45,13 @@ const Form = () => {
           id="category"
           className="bg-zinc-50 py-2 pl-1 border border-zinc-700 "
           value={options.categoryName}
-          onChange={(e) => setOptions({ ...options, categoryName: e.target.value })}
+          onChange={selectHandler}
         >
-          <option value={generalKnowledge.category}>
-            {generalKnowledge.name}
-          </option>
-          <option value={mythology.category}>{mythology.name}</option>
-          <option value={videoGames.category}>{videoGames.name}</option>
-          <option value={sports.category}>{sports.name}</option>
+          {categories.map((category) => (
+            <option key={category.id} value={category.categoryCode}>
+              {category.categoryName}
+            </option>
+          ))}
         </select>
       </div>
       <div className="flex flex-col">

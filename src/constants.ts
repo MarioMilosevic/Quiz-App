@@ -1,5 +1,7 @@
 export const baseUrl = `https://opentdb.com/api.php?`;
-export const generalKnowledge = { name: "General Knowledge", category: "15" };
-export const mythology = { name: "Mythology", category: "20" };
-export const videoGames = { name: "Video Games", category: "15" };
-export const sports = { name: "sports", category: "21" };
+export const categories = [
+  { id:crypto.randomUUID(),categoryName: "General Knowledge", categoryCode: "9" },
+  { id:crypto.randomUUID(),categoryName: "Mythology", categoryCode: "20" },
+  { id:crypto.randomUUID(),categoryName: "Video Games", categoryCode: "15" },
+  { id:crypto.randomUUID(),categoryName: "Sports", categoryCode: "21" },
+];
