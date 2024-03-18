@@ -1,19 +1,27 @@
 import { useState } from "react";
 import { categories } from "../constants";
 
-const Form = ({ generateApiUrl }) => {
-  const [options, setOptions] = useState({
+interface FormTypes {
+  generateApiUrl: (options: OptionsForm) => void;
+}
+export interface OptionsForm {
+  amount: string;
+  categoryName: string | undefined;
+  categoryCode: string | undefined;
+  difficulty: string;
+}
+const Form = ({ generateApiUrl }: FormTypes) => {
+  const [options, setOptions] = useState<OptionsForm>({
     amount: "10",
     categoryName: "General Knowledge",
     categoryCode: "9",
     difficulty: "easy",
   });
 
-  const selectHandler = (e) => {
+  const selectHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedCategory = categories.find(
       (category) => category.categoryCode === e.target.value
     );
-    console.log(selectedCategory)
     setOptions({
       ...options,
       categoryName: selectedCategory?.categoryName,
