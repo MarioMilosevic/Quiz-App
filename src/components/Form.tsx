@@ -30,7 +30,7 @@ const Form = ({ generateApiUrl }: FormTypes) => {
   };
 
   return (
-    <div className="bg-zinc-50 p-8 flex gap-4 mx-auto flex-col w-[550px] rounded-3xl shadow-lg">
+    <div className="bg-zinc-50 p-8 flex gap-4 mx-auto flex-col w-[550px] mb-8 rounded-3xl shadow-lg">
       <h1 className="text-3xl font-bold">Quiz setup</h1>
       <div className="flex flex-col">
         <label htmlFor="questions" className="pb-2 font-medium text-xl">
