@@ -1,10 +1,11 @@
+import { ReactNode } from "react";
 
-const Answer = () => {
+const Answer = ({ children }: { children: ReactNode }) => {
   return (
-    <div>
-      
-    </div>
-  )
-}
+    <p className="text-center text-xl w-[75%] mx-auto bg-zinc-700 text-zinc-50 cursor-pointer hover:bg-zinc-800">
+      {children}
+    </p>
+  );
+};
 
-export default Answer
+export default Answer;
