@@ -1,11 +1,12 @@
 
 import Form from "./components/Form";
 
+import Loading from "./Loading";
 function App() {
-
   return (
     <>
-      <Form/>
+      <Form />
+      <Loading/>
     </>
   );
 }
