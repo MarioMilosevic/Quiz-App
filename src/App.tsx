@@ -1,23 +1,54 @@
 import { useState } from "react";
-import Form, { OptionsForm } from "./components/Form";
+import Form from "./components/Form";
 import Loading from "./Loading";
 import Questions from "./components/Questions";
-import { baseUrl } from "./constants";
-function App() {
+import { baseUrl, categories } from "./constants";
 
-  const [phase,setPhase] = useState("form")
-  const [data, setData] = useState(null)
+export interface OptionsForm {
+  amount: string;
+  categoryName: string | undefined;
+  categoryCode: string | undefined;
+  difficulty: string;
+}
+
+function App() {
+  const [phase, setPhase] = useState("form");
+  const [data, setData] = useState(null);
+  const [options, setOptions] = useState<OptionsForm>({
+    amount: "10",
+    categoryName: "General Knowledge",
+    categoryCode: "9",
+    difficulty: "easy",
+  });
+
+  const amountHandler = (e:React.ChangeEvent<HTMLInputElement>) => {
+    setOptions({ ...options, amount: e.target.value });
+  };
+
+  const difficultyHandler = (e:React.ChangeEvent<HTMLInputElement>) => {
+    setOptions({ ...options, amount: e.target.value });
+  };
+
+  const selectHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedCategory = categories.find(
+      (category) => category.categoryCode === e.target.value
+    );
+    setOptions({
+      ...options,
+      categoryName: selectedCategory?.categoryName,
+      categoryCode: selectedCategory?.categoryCode,
+    });
+  };
 
   const generateApiUrl = async (options: OptionsForm) => {
     const { amount, categoryCode, difficulty } = options;
     const url = `${baseUrl}amount=${amount}&category=${categoryCode}&difficulty=${difficulty}`;
-
     try {
-     setPhase("loading") 
-     const response = await fetch(url);
-     const data = await response.json();
-     setData(data)
-     setPhase("questions")
+      setPhase("loading");
+      const response = await fetch(url);
+      const data = await response.json();
+      setData(data);
+      setPhase("questions");
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -25,9 +56,17 @@ function App() {
 
   return (
     <>
-      {phase === "form" && <Form generateApiUrl={generateApiUrl} />}
+      {phase === "form" && (
+        <Form
+          options={options}
+          generateApiUrl={generateApiUrl}
+          amountHandler={amountHandler}
+          selectHandler={selectHandler}
+          difficultyHandler={difficultyHandler}
+        />
+      )}
       {phase === "loading" && <Loading />}
-      {phase === "questions" && <Questions data={data}/>}
+      {phase === "questions" && <Questions data={data} />}
     </>
   );
 }

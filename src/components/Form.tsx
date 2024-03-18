@@ -1,33 +1,16 @@
-import { useState } from "react";
 import { categories } from "../constants";
-
+import { OptionsForm } from "../App";
 interface FormTypes {
   generateApiUrl: (options: OptionsForm) => void;
-}
-export interface OptionsForm {
-  amount: string;
-  categoryName: string | undefined;
-  categoryCode: string | undefined;
-  difficulty: string;
-}
-const Form = ({ generateApiUrl }: FormTypes) => {
-  const [options, setOptions] = useState<OptionsForm>({
-    amount: "10",
-    categoryName: "General Knowledge",
-    categoryCode: "9",
-    difficulty: "easy",
-  });
+  amountHandler:(e:React.ChangeEvent<HTMLInputElement>) => void;
+  difficultyHandler:(e:React.ChangeEvent<HTMLInputElement>) => void;
+  selectHandler:(e:React.ChangeEvent<HTMLSelectElement>) => void;
+  options:OptionsForm;
 
-  const selectHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedCategory = categories.find(
-      (category) => category.categoryCode === e.target.value
-    );
-    setOptions({
-      ...options,
-      categoryName: selectedCategory?.categoryName,
-      categoryCode: selectedCategory?.categoryCode,
-    });
-  };
+}
+
+const Form = ({ generateApiUrl, amountHandler, selectHandler, difficultyHandler, options }: FormTypes) => {
+
 
   return (
     <div className="bg-zinc-50 p-8 flex gap-4 mx-auto flex-col w-[550px] mb-8 rounded-3xl shadow-lg">
@@ -40,7 +23,7 @@ const Form = ({ generateApiUrl }: FormTypes) => {
           type="number"
           value={options.amount}
           className="bg-zinc-50 border border-zinc-700 pl-2 p-1"
-          onChange={(e) => setOptions({ ...options, amount: e.target.value })}
+          onChange={amountHandler}
         />
       </div>
 
@@ -70,9 +53,7 @@ const Form = ({ generateApiUrl }: FormTypes) => {
           id="difficulty"
           className="bg-zinc-50 py-2 pl-1 border border-zinc-700"
           value={options.difficulty}
-          onChange={(e) =>
-            setOptions({ ...options, difficulty: e.target.value })
-          }
+          onChange={difficultyHandler}
         >
           <option value="easy">Easy</option>
           <option value="medium">Medium</option>
