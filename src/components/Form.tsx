@@ -1,19 +1,19 @@
 import { useState } from "react";
 import { categories } from "../constants";
 
-const Form = () => {
+const Form = ({ generateApiUrl }) => {
   const [options, setOptions] = useState({
     amount: "10",
     categoryName: "General Knowledge",
     categoryCode: "9",
-    difficulty: "Easy",
+    difficulty: "easy",
   });
-  console.log(options);
 
   const selectHandler = (e) => {
     const selectedCategory = categories.find(
       (category) => category.categoryCode === e.target.value
     );
+    console.log(selectedCategory)
     setOptions({
       ...options,
       categoryName: selectedCategory?.categoryName,
@@ -44,7 +44,6 @@ const Form = () => {
           name="category"
           id="category"
           className="bg-zinc-50 py-2 pl-1 border border-zinc-700 "
-          value={options.categoryName}
           onChange={selectHandler}
         >
           {categories.map((category) => (
@@ -69,10 +68,13 @@ const Form = () => {
         >
           <option value="easy">Easy</option>
           <option value="medium">Medium</option>
-          <option value="Hard">Hard</option>
+          <option value="hard">Hard</option>
         </select>
       </div>
-      <button className="rounded-full mt-4 px-4 py-2 bg-zinc-600 text-zinc-50 hover:bg-zinc-800">
+      <button
+        className="rounded-full mt-4 px-4 py-2 bg-zinc-600 text-zinc-50 hover:bg-zinc-800"
+        onClick={() => generateApiUrl(options)}
+      >
         Start playing!
       </button>
     </div>

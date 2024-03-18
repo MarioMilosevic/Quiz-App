@@ -12,8 +12,9 @@ function App() {
 
   // https://opentdb.com/api.php?amount=10&category=9&difficulty=medium
 
-  const generateApiUrl = async (amount, category, difficulty) => {
-    const url = `${baseUrl}amount=${amount}&category=${category}&difficulty=${difficulty}`;
+  const generateApiUrl = async (options) => {
+    const { amount, categoryCode, difficulty } = options;
+    const url = `${baseUrl}amount=${amount}&category=${categoryCode}&difficulty=${difficulty}`;
 
     try {
       const response = await fetch(url);
@@ -28,14 +29,8 @@ function App() {
 
   return (
     <>
-      {!isLoading && <Form />}
+      {!isLoading && <Form generateApiUrl={generateApiUrl} />}
       {isLoading && <Loading />}
-      <button
-        className=" border border-black"
-        onClick={() => generateApiUrl(10, 23, "easy")}
-      >
-        Salji rekvest
-      </button>
     </>
   );
 }
