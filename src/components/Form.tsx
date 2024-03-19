@@ -1,17 +1,21 @@
 import { categories } from "../constants";
 import { OptionsForm } from "../App";
 interface FormTypes {
-  generateApiUrl: (options: OptionsForm) => void;
-  amountHandler:(e:React.ChangeEvent<HTMLInputElement>) => void;
-  difficultyHandler:(e:React.ChangeEvent<HTMLInputElement>) => void;
-  selectHandler:(e:React.ChangeEvent<HTMLSelectElement>) => void;
-  options:OptionsForm;
+    generateApiUrl: (options: OptionsForm) => void;
+    amountHandler: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    difficultyHandler: (e: React.ChangeEvent<HTMLSelectElement>) => void; // Corrected type
+    selectHandler: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+    options: OptionsForm;
+  }
+  
 
-}
-
-const Form = ({ generateApiUrl, amountHandler, selectHandler, difficultyHandler, options }: FormTypes) => {
-
-
+const Form = ({
+  generateApiUrl,
+  amountHandler,
+  selectHandler,
+  difficultyHandler,
+  options,
+}: FormTypes) => {
   return (
     <div className="bg-zinc-50 p-8 flex gap-4 mx-auto flex-col w-[550px] mb-8 rounded-3xl shadow-lg">
       <h1 className="text-3xl font-bold">Quiz setup</h1>

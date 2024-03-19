@@ -1,10 +1,9 @@
-import { ReactNode } from "react";
-
-const Answer = ({ children }: { children: ReactNode }) => {
+const Answer = ({ answer }) => {
   return (
-    <p className="text-center py-2 text-xl w-[60%] mx-auto bg-zinc-700 text-zinc-50 cursor-pointer hover:bg-zinc-800">
-      {children}
-    </p>
+    <p
+      dangerouslySetInnerHTML={{ __html: answer }}
+      className="text-center py-2 text-xl w-[60%] mx-auto bg-zinc-700 text-zinc-50 cursor-pointer hover:bg-zinc-800"
+    ></p>
   );
 };
 

@@ -13,7 +13,9 @@ export interface OptionsForm {
 
 function App() {
   const [phase, setPhase] = useState("form");
-  const [data, setData] = useState(null);
+  const [question,setQuestion] = useState('')
+  const [answers, setAnswers] = useState({correctAnswer:"", incorrectAnswers:[]})
+  const [currentQuestion, setCurrentQuestion] = useState(0);
   const [options, setOptions] = useState<OptionsForm>({
     amount: "10",
     categoryName: "General Knowledge",
@@ -21,12 +23,12 @@ function App() {
     difficulty: "easy",
   });
 
-  const amountHandler = (e:React.ChangeEvent<HTMLInputElement>) => {
+  const amountHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setOptions({ ...options, amount: e.target.value });
   };
 
-  const difficultyHandler = (e:React.ChangeEvent<HTMLInputElement>) => {
-    setOptions({ ...options, amount: e.target.value });
+  const difficultyHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setOptions({ ...options, difficulty: e.target.value });
   };
 
   const selectHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -40,6 +42,10 @@ function App() {
     });
   };
 
+  const nextQuestion = () => {
+    setCurrentQuestion(prev => prev + 1)
+  }
+
   const generateApiUrl = async (options: OptionsForm) => {
     const { amount, categoryCode, difficulty } = options;
     const url = `${baseUrl}amount=${amount}&category=${categoryCode}&difficulty=${difficulty}`;
@@ -47,7 +53,11 @@ function App() {
       setPhase("loading");
       const response = await fetch(url);
       const data = await response.json();
-      setData(data);
+      const { results } = data;
+      const questionObject = results[currentQuestion];
+      const { question, correct_answer, incorrect_answers } = questionObject;
+      setQuestion(question)
+      setAnswers({correctAnswer:correct_answer, incorrectAnswers:incorrect_answers})
       setPhase("questions");
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -66,7 +76,7 @@ function App() {
         />
       )}
       {phase === "loading" && <Loading />}
-      {phase === "questions" && <Questions data={data} />}
+      {phase === "questions" && <Questions question={question} answers={answers} currentQuestion={currentQuestion}/>}
     </>
   );
 }
