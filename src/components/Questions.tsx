@@ -27,6 +27,7 @@ const Questions = ({ responseData }) => {
       const { results } = responseData;
       const questionObject = results[currentQuestion];
       const { question, correct_answer, incorrect_answers } = questionObject;
+      console.log('radi')
       setData({
         questionData:question,
         correctAnswer: correct_answer,
@@ -34,26 +35,25 @@ const Questions = ({ responseData }) => {
       });
     }
   }, [responseData, currentQuestion]);
-  const allAnswers = [data.correctAnswer, ...data.incorrectAnswers];
 
+
+  function shuffleAnswers(correctAnswer, incorrectAnswers) {
+    const allAnswers = [correctAnswer, ...incorrectAnswers];
+    const randomIndex = Math.floor(Math.random() * allAnswers.length);
+    [allAnswers[0], allAnswers[randomIndex]] = [allAnswers[randomIndex], allAnswers[0]];
+    return allAnswers;
+  }
+  const allAnswers = shuffleAnswers(data.correctAnswer, data.incorrectAnswers)
 
   const checkAnswer = (e) => {
-    const selectedAnwer = e.target.getAttribute('data-answer')
-    if(selectedAnwer === data.correctAnswer) {
-      setScore(prev => prev + 1)
-    } setCurrentQuestion(prev => prev + 1)
+    if(currentQuestion < 10){
+      const selectedAnwer = e.target.getAttribute('data-answer')
+      if(selectedAnwer === data.correctAnswer) {
+        setScore(prev => prev + 1)
+      } setCurrentQuestion(prev => prev + 1)
+    } else return
   }
-    // const selectedAnswer = e.target
-    // console.log(selectedAnswer)
-    // console.log(data.correctAnswer)
-    // if(selectedAnswer === data.correctAnswer){
-      // console.log('tacan odgovor')
-    // } else {
-      // console.log("netacan odgovor")
-    // console.log(e.target.textContent)
-    // const selectedAnswer = allAnswers.find(answer => answer === data.correctAnswer)
-    // console.log(selectedAnswer)
-  // }
+
 
   return (
     <div className="bg-zinc-50 shadow-xl rounded-xl w-[50%] mx-auto p-8">
