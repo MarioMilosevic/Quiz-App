@@ -16,9 +16,10 @@ import { useState} from "react";
 //   data: { results: Question[] };
 // }
 const Questions = ({ responseData, options, resetGame }) => {
+
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
-  const [isModalActive, setIsModalActive] = useState(true);
+  const [isModalActive, setIsModalActive] = useState(false);
   const amount = options.amount;
   
 
@@ -47,11 +48,13 @@ const Questions = ({ responseData, options, resetGame }) => {
     console.log(currentQuestion);
     const selectedAnwer = e.target.getAttribute("data-answer");
     // amount je 3 onda je ovo 2 current je 0 na pocetku
-    if (currentQuestion < amount) {
+    if (currentQuestion + 1 < amount) {
       setCurrentQuestion((prev) => prev + 1);
       if (selectedAnwer === data.correctAnswer) {
         setScore((prev) => prev + 1);
       }
+    } else {
+      setIsModalActive(true)
     }
   };
 
