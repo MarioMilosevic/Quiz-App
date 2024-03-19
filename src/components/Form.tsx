@@ -24,6 +24,7 @@ const Form = ({
           Number of questions
         </label>
         <input
+        id="questions"
           type="number"
           value={options.amount}
           className="bg-zinc-50 border border-zinc-700 pl-2 p-1"

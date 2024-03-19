@@ -13,9 +13,7 @@ export interface OptionsForm {
 
 function App() {
   const [phase, setPhase] = useState("form");
-  const [question,setQuestion] = useState('')
-  const [answers, setAnswers] = useState({correctAnswer:"", incorrectAnswers:[]})
-  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [responseData, setResponseData] = useState(null);
   const [options, setOptions] = useState<OptionsForm>({
     amount: "10",
     categoryName: "General Knowledge",
@@ -42,9 +40,7 @@ function App() {
     });
   };
 
-  const nextQuestion = () => {
-    setCurrentQuestion(prev => prev + 1)
-  }
+
 
   const generateApiUrl = async (options: OptionsForm) => {
     const { amount, categoryCode, difficulty } = options;
@@ -53,11 +49,8 @@ function App() {
       setPhase("loading");
       const response = await fetch(url);
       const data = await response.json();
-      const { results } = data;
-      const questionObject = results[currentQuestion];
-      const { question, correct_answer, incorrect_answers } = questionObject;
-      setQuestion(question)
-      setAnswers({correctAnswer:correct_answer, incorrectAnswers:incorrect_answers})
+      setResponseData(data);
+
       setPhase("questions");
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -76,7 +69,11 @@ function App() {
         />
       )}
       {phase === "loading" && <Loading />}
-      {phase === "questions" && <Questions question={question} answers={answers} currentQuestion={currentQuestion}/>}
+      {phase === "questions" && (
+        <Questions
+          responseData={responseData}
+        />
+      )}
     </>
   );
 }

@@ -1,5 +1,5 @@
 import Answer from "./Answer";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface Question {
   type: string;
@@ -14,63 +14,67 @@ interface QuestionsType {
   // response_code:number;
   data: { results: Question[] };
 }
+const Questions = ({ responseData }) => {
+  const [currentQuestion, setCurrentQuestion] = useState(0)
+  const [score, setScore] = useState(0)
+  const [data, setData] = useState({
+    questionData: "",
+    correctAnswer: "",
+    incorrectAnswers: [],
+  });
+  useEffect(() => {
+    if (responseData) {
+      const { results } = responseData;
+      const questionObject = results[currentQuestion];
+      const { question, correct_answer, incorrect_answers } = questionObject;
+      setData({
+        questionData:question,
+        correctAnswer: correct_answer,
+        incorrectAnswers: incorrect_answers,
+      });
+    }
+  }, [responseData, currentQuestion]);
+  const allAnswers = [data.correctAnswer, ...data.incorrectAnswers];
 
-// const Questions = ({ data }: QuestionsType) => {
-const Questions = ({ answers, question, currentQuestion }) => {
-  const allAnswers = [answers.correctAnswer, ...answers.incorrectAnswers];
-  console.log(allAnswers);
 
-  // const [currentQuestion, setCurrentQuestion] = useState(0);
-  // const [answers, setAnswers] = useState({correctAnswer:"", incorrectAnswers:[]})
-  // console.log(data);
-  // const { results } = data;
-  // const questionObject = results[currentQuestion];
-  // const { question, correct_answer, incorrect_answers } = questionObject;
-  // setAnswers({correctAnswer:correct_answer, incorrectAnswers:incorrect_answers})
-  // console.log(answers)
+  const checkAnswer = (e) => {
+    const selectedAnwer = e.target.getAttribute('data-answer')
+    if(selectedAnwer === data.correctAnswer) {
+      setScore(prev => prev + 1)
+    } setCurrentQuestion(prev => prev + 1)
+  }
+    // const selectedAnswer = e.target
+    // console.log(selectedAnswer)
+    // console.log(data.correctAnswer)
+    // if(selectedAnswer === data.correctAnswer){
+      // console.log('tacan odgovor')
+    // } else {
+      // console.log("netacan odgovor")
+    // console.log(e.target.textContent)
+    // const selectedAnswer = allAnswers.find(answer => answer === data.correctAnswer)
+    // console.log(selectedAnswer)
+  // }
 
-  // const correctAnswerObject = {
-  //   value: correct_answer,
-  //   isCorrect: true,
-  //   id: crypto.randomUUID(),
-  // };
-
-  // const incorrectAnswersObjects = incorrect_answers.map((answer) => ({
-  //   value: answer,
-  //   isCorrect: false,
-  //   id: crypto.randomUUID(),
-  // }));
-
-  // const shuffle = (array: string[]) => {
-  //   for (let i = array.length - 1; i > 0; i--) {
-  //     const j = Math.floor(Math.random() * (i + 1));
-  //     [array[i], array[j]] = [array[j], array[i]];
-  //   }
-  //   return array;
-  // };
-
-  // const allAnswers = shuffle([correctAnswerObject, ...incorrectAnswersObjects]);
-  // console.log(allAnswers)
   return (
     <div className="bg-zinc-50 shadow-xl rounded-xl w-[50%] mx-auto p-8">
       <div className="text-right px-4">
-        <span>Correct answers: /{currentQuestion}</span>
+        <span>Correct answers: {score}/{currentQuestion}</span>
       </div>
       <header className="text-center px-4 py-16">
         <p
-          dangerouslySetInnerHTML={{ __html: question }}
+          dangerouslySetInnerHTML={{ __html: data.questionData }}
           className="text-3xl font-medium"
         ></p>
       </header>
       <div className="flex flex-col gap-2">
         {allAnswers.map((answer, index) => (
-          <Answer key={index} answer={answer}></Answer>
+          <Answer key={index} answer={answer} checkAnswer={checkAnswer}></Answer>
         ))}
       </div>
       <div className="text-right pt-16 px-4">
         <button
           className="bg-amber-600 px-8 py-4 rounded-full text-lg text-amber-50"
-          // onClick={() => setCurrentQuestion((prev) => prev + 1)}
+          onClick={() => setCurrentQuestion(prev => prev + 1)}
         >
           Next question
         </button>
