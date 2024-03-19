@@ -57,6 +57,16 @@ function App() {
     }
   };
 
+  const resetGame = () => {
+    setOptions({
+      amount: "10",
+      categoryName: "General Knowledge",
+      categoryCode: "9",
+      difficulty: "easy",
+    });
+    setPhase("form")
+  }
+
   return (
     <>
       {phase === "form" && (
@@ -72,6 +82,8 @@ function App() {
       {phase === "questions" && (
         <Questions
           responseData={responseData}
+          options={options}
+          resetGame={resetGame}
         />
       )}
     </>

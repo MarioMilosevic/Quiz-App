@@ -1,22 +1,26 @@
 import Answer from "./Answer";
-import { useState } from "react";
+import Modal from "./Modal";
+import { useState} from "react";
 
-interface Question {
-  type: string;
-  difficulty: string;
-  category: string;
-  question: string;
-  correct_answer: string;
-  incorrect_answers: string[];
-}
+// interface Question {
+//   type: string;
+//   difficulty: string;
+//   category: string;
+//   question: string;
+//   correct_answer: string;
+//   incorrect_answers: string[];
+// }
 
-interface QuestionsType {
-  // response_code:number;
-  data: { results: Question[] };
-}
-const Questions = ({ responseData }) => {
+// interface QuestionsType {
+//   // response_code:number;
+//   data: { results: Question[] };
+// }
+const Questions = ({ responseData, options, resetGame }) => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
+  const [isModalActive, setIsModalActive] = useState(true);
+  const amount = options.amount;
+  
 
   const { results } = responseData;
   const questionObject = results[currentQuestion];
@@ -27,34 +31,28 @@ const Questions = ({ responseData }) => {
     incorrectAnswers: incorrect_answers,
   };
 
-  function shuffleAnswers(correctAnswer, incorrectAnswers) {
-    const allAnswers = [correctAnswer, ...incorrectAnswers];
-    const randomIndex = Math.floor(Math.random() * allAnswers.length);
-    [allAnswers[0], allAnswers[randomIndex]] = [
-      allAnswers[randomIndex],
-      allAnswers[0],
+  function shuffleAnswers(a, b) {
+    const array = [a, ...b];
+    const randomIndex = Math.floor(Math.random() * array.length);
+    [array[0], array[randomIndex]] = [
+      array[randomIndex],
+      array[0],
     ];
-    return allAnswers;
+    return array;
   }
   const allAnswers = shuffleAnswers(data.correctAnswer, data.incorrectAnswers);
+
 
   const checkAnswer = (e) => {
     console.log(currentQuestion);
     const selectedAnwer = e.target.getAttribute("data-answer");
-    if (currentQuestion < 9) {
+    // amount je 3 onda je ovo 2 current je 0 na pocetku
+    if (currentQuestion < amount) {
+      setCurrentQuestion((prev) => prev + 1);
       if (selectedAnwer === data.correctAnswer) {
         setScore((prev) => prev + 1);
       }
-    } else if (currentQuestion === 9) {
-      console.log(selectedAnwer);
-      console.log(data.correctAnswer);
-      selectedAnwer === data.correctAnswer ? setScore((prev) => prev + 1) : "";
-      setCurrentQuestion((prev) => prev + 1);
-      // setCurrentQuestion(prev => prev + 1)
-      console.log("modal da iskoci");
-      return;
     }
-    setCurrentQuestion((prev) => prev + 1);
   };
 
   return (
@@ -86,6 +84,7 @@ const Questions = ({ responseData }) => {
         >
           Next question
         </button>
+        {isModalActive && <Modal score={score} amount={amount} resetGame={resetGame}/>}
       </div>
     </div>
   );
