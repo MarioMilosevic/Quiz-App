@@ -1,6 +1,6 @@
 import Answer from "./Answer";
 import Modal from "./Modal";
-import { useState} from "react";
+import { useState } from "react";
 
 // interface Question {
 //   type: string;
@@ -16,12 +16,10 @@ import { useState} from "react";
 //   data: { results: Question[] };
 // }
 const Questions = ({ responseData, options, resetGame }) => {
-
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
   const [isModalActive, setIsModalActive] = useState(false);
   const amount = options.amount;
-  
 
   const { results } = responseData;
   const questionObject = results[currentQuestion];
@@ -32,29 +30,18 @@ const Questions = ({ responseData, options, resetGame }) => {
     incorrectAnswers: incorrect_answers,
   };
 
-  function shuffleAnswers(a, b) {
-    const array = [a, ...b];
-    const randomIndex = Math.floor(Math.random() * array.length);
-    [array[0], array[randomIndex]] = [
-      array[randomIndex],
-      array[0],
-    ];
-    return array;
-  }
-  const allAnswers = shuffleAnswers(data.correctAnswer, data.incorrectAnswers);
+  const randomIndex = Math.floor(Math.random() * incorrect_answers.length + 1);
+  const allAnswers = [...incorrect_answers];
+  allAnswers.splice(randomIndex, 0, correct_answer);
 
-
-  const checkAnswer = (e) => {
-    console.log(currentQuestion);
-    const selectedAnwer = e.target.getAttribute("data-answer");
-    // amount je 3 onda je ovo 2 current je 0 na pocetku
+  const checkAnswer = (answer: string) => {
     if (currentQuestion + 1 < amount) {
       setCurrentQuestion((prev) => prev + 1);
-      if (selectedAnwer === data.correctAnswer) {
+      if (answer === data.correctAnswer) {
         setScore((prev) => prev + 1);
       }
     } else {
-      setIsModalActive(true)
+      setIsModalActive(true);
     }
   };
 
@@ -87,7 +74,9 @@ const Questions = ({ responseData, options, resetGame }) => {
         >
           Next question
         </button>
-        {isModalActive && <Modal score={score} amount={amount} resetGame={resetGame}/>}
+        {isModalActive && (
+          <Modal score={score} amount={amount} resetGame={resetGame} />
+        )}
       </div>
     </div>
   );

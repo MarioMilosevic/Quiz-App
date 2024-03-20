@@ -3,7 +3,7 @@ import { OptionsForm } from "../App";
 interface FormTypes {
     generateApiUrl: (options: OptionsForm) => void;
     amountHandler: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    difficultyHandler: (e: React.ChangeEvent<HTMLSelectElement>) => void; // Corrected type
+    difficultyHandler: (e: React.ChangeEvent<HTMLSelectElement>) => void;
     selectHandler: (e: React.ChangeEvent<HTMLSelectElement>) => void;
     options: OptionsForm;
   }

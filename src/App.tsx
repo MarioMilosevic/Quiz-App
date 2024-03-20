@@ -40,8 +40,6 @@ function App() {
     });
   };
 
-
-
   const generateApiUrl = async (options: OptionsForm) => {
     const { amount, categoryCode, difficulty } = options;
     const url = `${baseUrl}amount=${amount}&category=${categoryCode}&difficulty=${difficulty}`;
@@ -50,7 +48,6 @@ function App() {
       const response = await fetch(url);
       const data = await response.json();
       setResponseData(data);
-
       setPhase("questions");
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -64,8 +61,8 @@ function App() {
       categoryCode: "9",
       difficulty: "easy",
     });
-    setPhase("form")
-  }
+    setPhase("form");
+  };
 
   return (
     <>
