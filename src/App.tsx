@@ -35,7 +35,7 @@ function App() {
     );
     setOptions({
       ...options,
-      categoryName: selectedCategory?.categoryName,
+      categoryName: selectedCategory?.categoryName || "General Knowledge",
       categoryCode: selectedCategory?.categoryCode,
     });
   };
@@ -76,7 +76,7 @@ function App() {
         />
       )}
       {phase === "loading" && <Loading />}
-      {phase === "questions" && (
+      {phase === "questions" && responseData && (
         <Questions
           responseData={responseData}
           options={options}

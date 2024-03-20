@@ -1,25 +1,43 @@
 import Answer from "./Answer";
 import Modal from "./Modal";
 import { useState } from "react";
+interface MyMouseEvent
+  extends React.MouseEvent<HTMLParagraphElement, MouseEvent> {}
+interface Question {
+  type: string;
+  difficulty: string;
+  category: string;
+  question: string;
+  correct_answer: string;
+  incorrect_answers: string[];
+}
 
-// interface Question {
-//   type: string;
-//   difficulty: string;
-//   category: string;
-//   question: string;
-//   correct_answer: string;
-//   incorrect_answers: string[];
+interface QuestionsType {
+  options: {
+    amount: string;
+    categoryName: string | undefined;
+    categoryCode: string | undefined;
+    difficulty: string;
+  };
+  responseData: { results: Question[] } | null;
+  resetGame: () => void;
+}
+
+// interface AnswerType {
+//   answer: string;
+//   checkAnswer: (data: {
+//     answer: string;
+//     event: MyMouseEvent;
+//   }) => void;
 // }
 
-// interface QuestionsType {
-//   // response_code:number;
-//   data: { results: Question[] };
-// }
-const Questions = ({ responseData, options, resetGame }) => {
+const Questions = ({ responseData, options, resetGame }: QuestionsType) => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
   const [isModalActive, setIsModalActive] = useState(false);
-  const amount = options.amount;
+  const amount = Number(options.amount);
+
+  if (!responseData) return null;
 
   const { results } = responseData;
   const questionObject = results[currentQuestion];
@@ -34,10 +52,15 @@ const Questions = ({ responseData, options, resetGame }) => {
   const allAnswers = [...incorrect_answers];
   allAnswers.splice(randomIndex, 0, correct_answer);
 
-  const checkAnswer = (answer: string) => {
+  const checkAnswer = (
+    data: { answer: string; event: MyMouseEvent },
+    questionObject: Question
+  ) => {
+    const { answer } = data;
+
     if (currentQuestion + 1 < amount) {
       setCurrentQuestion((prev) => prev + 1);
-      if (answer === data.correctAnswer) {
+      if (answer === questionObject.correct_answer) {
         setScore((prev) => prev + 1);
       }
     } else {
@@ -63,7 +86,9 @@ const Questions = ({ responseData, options, resetGame }) => {
           <Answer
             key={index}
             answer={answer}
-            checkAnswer={checkAnswer}
+            checkAnswer={(e) =>
+              checkAnswer({ answer, event: e }, questionObject)
+            }
           ></Answer>
         ))}
       </div>
